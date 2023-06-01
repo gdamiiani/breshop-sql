@@ -113,10 +113,10 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION show_messages(id1 UUID, id2 UUID)
 RETURNS TABLE(datetime_sent TIMESTAMP, message VARCHAR, name VARCHAR) AS
 $$
-  SELECT m.datetime_sent, m.message, c.name
+  SELECT m.datetime_sent, c.name, m.message
   FROM message m, client c
   WHERE c.id = m.id_sender
-  AND m.id_sender = id1
-  AND m.id_receiver =  id2
+  AND (c.id = id1
+  OR c.id = id2)
   ORDER BY m.datetime_sent DESC;
 $$ LANGUAGE SQL;
